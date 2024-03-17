@@ -24,7 +24,7 @@ source.getSearchCapabilities = () => {
 	};
 };
 source.search = function (query, type, order, filters) {
-
+    log(`query: ${query}`);
 
     return getVideoPager(VIDEO_SEARCH_URL, {
         search: query,
@@ -78,18 +78,22 @@ source.getSubComments = function (comment) {
 
 function getVideoPager(path, params, page) {
     const url = VIDEO_SEARCH_URL + params.search.replace(/ /g, "_") + `/p${page}?s=best`;
-    const res = http.GET(url, {});
+    log(`url: ${url}`);
+    const res = http.GET(`https://${url}`, {});
 
+    //log(res);
     if (res.code != 200) {
         return new VideoPager([], false);
     }
     const parser = new DOMParser();
 
     const html = parser.parseFromString(res.body, "text/html");
-    const durationsConvert = [3600, 60, 1];
 
+    const durationsConvert = [3600, 60, 1];
+    log(html);
     return new CDAVideoPager(html.querySelectorAll(".video-clip-wrapper").map(video => {
         const videoHref = video.querySelector("a.link-title-visit");
+        log(videoHref);
         const videoID = videoHref.href.replace(`https://${VIDEO_URL}/`, "").replace("/vfilm", "");
         const durationArray = video.querySelector("span.timeElem").innerText.split(":");
         let duration = 0;

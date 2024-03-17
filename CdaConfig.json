@@ -14,10 +14,11 @@
 
 	"scriptSignature": "",
 	"scriptPublicKey": "",
-	"packages": ["Http"],
+	"packages": ["Http", "DOMParser"],
 
 	"allowEval": false,
 	"allowUrls": [
-
+        "www.cda.pl",
+        "icdn.cda.pl"
 	]
 }
