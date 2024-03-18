@@ -71,7 +71,21 @@ source.getContentDetails = function(url) {
         return null;
     }
 
-    const html = domParser.parseFromString(res.body.substring(res.body.indexOf("<body"), res.body.lastIndexOf("</body>") + 7));
+    log(url);
+
+    const html = domParser.parseFromString(res.body);
+    const playerScript = http.GET("https://www.cda.pl/js/player.js?t=1710798377", {});
+    if (playerScript.code != 200) {
+        return null;
+    }
+
+    let window = {
+        "location":{"href":url,"origin":"https://www.cda.pl","protocol":"https:","host":"www.cda.pl","hostname":"www.cda.pl","port":"","pathname":url.replace("https://www.cda.pl",""),"search":"","hash":""},
+        "navigator":{},
+        "document":html
+    };
+
+    eval(playerScript.body);
 
     return new PlatformVideoDetails({
         id: new PlatformID(PLATFORM, url.replace(`https://${VIDEO_URL}`, "").replace("/vfilm", ""), config.id),

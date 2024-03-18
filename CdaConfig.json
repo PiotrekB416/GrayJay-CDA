@@ -16,9 +16,8 @@
 	"scriptPublicKey": "",
 	"packages": ["Http", "DOMParser"],
 
-	"allowEval": false,
+	"allowEval": true,
 	"allowUrls": [
-        "www.cda.pl",
-        "icdn.cda.pl"
+        "everywhere"
 	]
 }
