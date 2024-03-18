@@ -61,8 +61,9 @@ source.getChannelContents = function(url) {
 
 //Video
 source.isContentDetailsUrl = function(url) {
-	throw new ScriptException("This is a sample");
+    return url.includes(VIDEO_URL) && !url.includes(VIDEO_SEARCH_URL);
 };
+
 source.getContentDetails = function(url) {
 	const res = http.GET(url, {});
 
@@ -77,8 +78,9 @@ source.getContentDetails = function(url) {
         name: html.querySelector("#naglowek").text,
         url,
         video: new VideoSourceDescriptor([new VideoUrlSource({
+            //url: html.querySelector("video").getAttribute("src"),
             url: html.querySelector("video").getAttribute("src"),
-            container: "video/mp4",
+            //container: "video/mp4",
         })]),
     });
 };
