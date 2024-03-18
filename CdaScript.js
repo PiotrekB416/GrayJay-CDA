@@ -64,7 +64,23 @@ source.isContentDetailsUrl = function(url) {
 	throw new ScriptException("This is a sample");
 };
 source.getContentDetails = function(url) {
-	throw new ScriptException("This is a sample");
+	const res = http.GET(url, {});
+
+    if (res.code != 200) {
+        return null;
+    }
+
+    const html = domParser.parseFromString(res.body.substring(res.body.indexOf("<body"), res.body.lastIndexOf("</body>") + 7));
+
+    return new PlatformVideoDetails({
+        id: new PlatformID(PLATFORM, url.replace(`https://${VIDEO_URL}`, "").replace("/vfilm", ""), config.id),
+        name: html.querySelector("#naglowek").text,
+        url,
+        video: new VideoSourceDescriptor([new VideoUrlSource({
+            url: html.querySelector("video").getAttribute("src"),
+            container: "video/mp4",
+        })]),
+    });
 };
 
 //Comments
@@ -78,41 +94,41 @@ source.getSubComments = function (comment) {
 
 function getVideoPager(path, params, page) {
     const url = VIDEO_SEARCH_URL + params.search.replace(/ /g, "_") + `/p${page}?s=best`;
-    log(`url: ${url}`);
     const res = http.GET(`https://${url}`, {});
 
     //log(res);
     if (res.code != 200) {
         return new VideoPager([], false);
     }
-    const parser = new DOMParser();
+    //const parser = new DOMParser();
 
-    const html = parser.parseFromString(res.body, "text/html");
+    const html = domParser.parseFromString(res.body.substring(res.body.indexOf("<body"), res.body.lastIndexOf("</body>") + 7));;
 
     const durationsConvert = [3600, 60, 1];
-    log(html);
     return new CDAVideoPager(html.querySelectorAll(".video-clip-wrapper").map(video => {
         const videoHref = video.querySelector("a.link-title-visit");
-        log(videoHref);
-        const videoID = videoHref.href.replace(`https://${VIDEO_URL}/`, "").replace("/vfilm", "");
-        const durationArray = video.querySelector("span.timeElem").innerText.split(":");
+        const videoID = videoHref.getAttribute("href").replace(`https://${VIDEO_URL}`, "").replace("/vfilm", "");
+        const durationArray = video.querySelector("span.timeElem").text.split(":");
         let duration = 0;
-        for (i = durationArray.length - 1; i >= 0; i--) {
-            duration += durationArray[i] * durationsConvert[i];
+        log(durationArray);
+        for (let i = 1; i <= durationArray.length; i++) {
+            duration += durationArray[durationArray.length - i] * durationsConvert[3-i];
         }
+
+        const imgSrc = video.querySelector("img").getAttribute("src");
 
         return new PlatformVideo({
             id: new PlatformID(PLATFORM, videoID, config.id),
-            name: videoHref.innerText,
-            thumbnails: new Thumbnails([new Thumbnail(video.querySelector("img").src , 0)]),
+            name: videoHref.text,
+            thumbnails: new Thumbnails([new Thumbnail("https:" + imgSrc , 0)]),
             author: new PlatformAuthorLink(new PlatformID(PLATFORM, "", config.id), "", "", ""),
             uploadDate: 0,
             duration,
             viewCount: 0,
-            url: videoHref.href,
+            url: "https://"+VIDEO_URL+videoID+"/vfilm",
             isLive: false
         });
-    }), false, url, params, page);
+    }), html.querySelectorAll(".sbmNext").length > 0, url, params, page);
 }
 
 class CDAVideoPager extends VideoPager {
