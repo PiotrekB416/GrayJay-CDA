@@ -70,9 +70,7 @@ source.isContentDetailsUrl = function(url) {
 };
 
 source.getContentDetails = function(url) {
-    url = url.replace("https://www.cda.pl", "https://api.cda.pl").replace("/vfilm", "");
-
-	const res = http.GET(url, ANONYMOUS_REQUEST_PARAMS);
+    const res = http.GET(url.replace("https://www.cda.pl", "https://api.cda.pl").replace("/vfilm", ""), ANONYMOUS_REQUEST_PARAMS);
 
     if (res.code != 200) {
         return null;
