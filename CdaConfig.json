@@ -14,10 +14,10 @@
 
 	"scriptSignature": "",
 	"scriptPublicKey": "",
-	"packages": ["Http", "DOMParser"],
+	"packages": ["Http"],
 
-	"allowEval": true,
+	"allowEval": false,
 	"allowUrls": [
-        "everywhere"
+        "api.cda.pl"
 	]
 }
