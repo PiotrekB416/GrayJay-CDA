@@ -14,9 +14,14 @@
 
 	"scriptSignature": "",
 	"scriptPublicKey": "",
-	"packages": ["Http"],
+	"packages": ["Http", "Utilities"],
 
 	"allowEval": false,
+    "authentication": {
+        "userAgent": "pl.cda 1.0",
+        "loginUrl": "https://piotrekb416.github.io/GrayJay-CDA/login.html",
+        "headersToFind": ["Authorization"]
+    },
 	"allowUrls": [
         "api.cda.pl"
 	]

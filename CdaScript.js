@@ -4,9 +4,8 @@ var config = {};
 
 const VIDEO_SEARCH_URL = "api.cda.pl/video/search";
 const VIDEO_URL = "www.cda.pl/video/";
-const API_VIDEO_URL = "api.cda.pl/video/"
-const ANONYMOUS_REQUEST_PARAMS = {
-    Authorization: "Basic NzdjMGYzYzUtMzZhMC00YzNkLWIwZDQtMGM0ZGZiZmQ1NmQ1Ok5wbU1MQldSZ3RFWDh2cDNLZjNkMHRhc0JwRnQwdHVHc3dMOWhSMHF0N2JRZGF4dXZER29jekZHZXFkNjhOajI",
+const API_VIDEO_URL = "api.cda.pl/video/";
+const REQUEST_PARAMS = {
     Accept: "application/vnd.cda.public+json",
 };
 
@@ -70,7 +69,7 @@ source.isContentDetailsUrl = function(url) {
 };
 
 source.getContentDetails = function(url) {
-    const res = http.GET(url.replace("https://www.cda.pl", "https://api.cda.pl").replace("/vfilm", ""), ANONYMOUS_REQUEST_PARAMS);
+    const res = http.GET(url.replace("https://www.cda.pl", "https://api.cda.pl").replace("/vfilm", ""), REQUEST_PARAMS);
 
     if (res.code != 200) {
         return null;
@@ -103,7 +102,7 @@ source.getSubComments = function (comment) {
 
 function getVideoPager(path, params, page) {
     const url = VIDEO_SEARCH_URL + "?query=" + encodeURI(params.search) + `&page=${page}&limit=20`;
-    const res = http.GET(`https://${url}`, ANONYMOUS_REQUEST_PARAMS);
+    const res = http.GET(`https://${url}`, REQUEST_PARAMS);
 
     log(res.code);
     if (res.code != 200) {
