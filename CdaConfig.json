@@ -4,9 +4,9 @@
 	"author": "Piotr Bartoszewicz",
 	"authorUrl": "https://github.com/PiotrekB416",
 
-	"sourceUrl": "https://piotrekb416.github.io/GrayJay-CDA/CdaConfig.json",
+	"sourceUrl": "http://192.168.1.220:8080/CdaConfig.json",
 	"repositoryUrl": "https://github.com/PiotrekB416/GrayJay-CDA",
-	"scriptUrl": "./CdaScript.js",
+	"scriptUrl": "./DeployedCdaScript.js",
 	"version": 1,
 
 	"iconUrl": "./sample.png",
@@ -14,15 +14,11 @@
 
 	"scriptSignature": "",
 	"scriptPublicKey": "",
-	"packages": ["Http", "Utilities"],
+	"packages": ["Http", "Utilities", "DOMParser"],
 
 	"allowEval": false,
-    "authentication": {
-        "userAgent": "pl.cda 1.0",
-        "loginUrl": "https://piotrekb416.github.io/GrayJay-CDA/login.html",
-        "headersToFind": ["Authorization"]
-    },
 	"allowUrls": [
-        "api.cda.pl"
+        "api.cda.pl",
+        "www.cda.pl"
 	]
 }
