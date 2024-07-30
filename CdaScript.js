@@ -140,6 +140,13 @@ source.getChannelContents = function(url, type, order, filters) {
     }, 1);
 };
 
+source.getChannelPlaylists = function(url) {
+    return getPlaylistPager(url, {
+        token: getToken(),
+        //author:
+    }, []);
+};
+
 //Video
 source.isContentDetailsUrl = function(url) {
     return url.includes(VIDEO_URL) && !url.includes(VIDEO_SEARCH_URL);
@@ -183,6 +190,28 @@ source.getComments = function (url) {
 
 source.getSubComments = function (comment) {
 	throw new ScriptException("This is a sample");
+}
+
+function getPlaylistVideos(path, params) {
+    let r_params = REQUEST_PARAMS;
+    r_params["Authorization"] = "Bearer " + params.token;
+    const res = http.GET(path, r_params);
+
+}
+
+function getPlaylistPager(path, params, page) {
+    path = path.replace("https://www.cda.pl", "https://api.cda.pl");
+    path = path.replace("/vfilm", "");
+    path += "/folders";
+    const res = http.GET(path, REQUEST_PARAMS);
+
+    if (res.code != 200) {
+        return new ContentPager([], false);
+    }
+
+    let body = JSON.parse(res.body);
+
+    let list = [new ]
 }
 
 function getVideoPager(path, params, page) {
@@ -240,7 +269,7 @@ function getVideoPager(path, params, page) {
                 name: video.title,
                 thumbnails: new Thumbnails([new Thumbnail(video.thumb)]),
                 author: new PlatformAuthorLink(new PlatformID(PLATFORM, author.id, config.id), author.login, `https://www.cda.pl/${author.login}`, author.avatar, ""),
-                uploadDate: 0,
+                uploadDate: video.published,
                 duration: video.duration,
                 viewCount: video.views,
                 url: "https://"+VIDEO_URL+video.id+"/vfilm",
@@ -280,6 +309,16 @@ function getCommentsPager(path, params, page) {
             replyCount: reply_count
         });
     }), data.paginator.total_pages > page, url, params, page);
+}
+
+class CDAPlaylistPages extends PlaylistPager {
+    constructor(results, hasMore, path, params, page) {
+        super(results, hasMore, { path, params, page });
+    }
+
+    nextPage() {
+        return getPlaylistPager(this.context.path, this.context.params, (this.context.page ?? 0) + 1);
+    }
 }
 
 class CDAVideoPager extends VideoPager {

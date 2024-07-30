@@ -4,7 +4,7 @@
 	"author": "Piotr Bartoszewicz",
 	"authorUrl": "https://github.com/PiotrekB416",
 
-	"sourceUrl": "http://192.168.1.220:8080/CdaConfig.json",
+	"sourceUrl": "http://192.168.1.116:8080/CdaConfig.json",
 	"repositoryUrl": "https://github.com/PiotrekB416/GrayJay-CDA",
 	"scriptUrl": "./DeployedCdaScript.js",
 	"version": 1,
